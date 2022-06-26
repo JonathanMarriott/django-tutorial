@@ -1,6 +1,9 @@
 import datetime
+from pydoc import describe
+from xmlrpc.client import boolean
 from django.utils import timezone
 from django.db import models
+from django.contrib import admin
 
 # Create your models here.
 
@@ -9,6 +12,10 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published')
     def __str__(self) -> str:
         return self.question_text
+
+    @admin.display(boolean=True,
+    ordering='pub_date',
+    description='Published Recently')
     def was_published_recently(self):
         now = timezone.now()
         return now >= self.pub_date >= timezone.now() - datetime.timedelta(days= 1)
